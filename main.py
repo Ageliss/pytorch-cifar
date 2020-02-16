@@ -1,6 +1,4 @@
 '''Train CIFAR10 with PyTorch.'''
-from __future__ import print_function
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -61,7 +59,8 @@ print('==> Building model..')
 # net = DPN92()
 # net = ShuffleNetG2()
 # net = SENet18()
-net = ShuffleNetV2(1)
+# net = ShuffleNetV2(1)
+net = EfficientNetB0()
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
@@ -71,7 +70,7 @@ if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
     assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/ckpt.t7')
+    checkpoint = torch.load('./checkpoint/ckpt.pth')
     net.load_state_dict(checkpoint['net'])
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
@@ -133,7 +132,7 @@ def test(epoch):
         }
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
-        torch.save(state, './checkpoint/ckpt.t7')
+        torch.save(state, './checkpoint/ckpt.pth')
         best_acc = acc
 
 
